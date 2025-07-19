@@ -1,4 +1,5 @@
 /* Get references to DOM elements */
+const generateRoutineBtn = document.getElementById("generateRoutine");
 const categoryFilter = document.getElementById("categoryFilter");
 const productsContainer = document.getElementById("productsContainer");
 const chatForm = document.getElementById("chatForm");
@@ -170,6 +171,70 @@ chatForm.addEventListener("submit", (e) => {
   e.preventDefault();
 
   chatWindow.innerHTML = "Connect to the OpenAI API for a response!";
+});
+
+/* Cloudflare Worker URL */
+const WORKER_URL = "https://loreal-chatbot.jsdobnik.workers.dev/"; 
+
+// Generate routine button click handler
+generateRoutineBtn.addEventListener("click", async () => {
+  if (selectedProducts.length === 0) {
+    chatWindow.innerHTML = "Please select some products to generate a routine.";
+    return;
+  }
+
+  // Prepare data for OpenAI API
+  const productsForAPI = selectedProducts.map(
+    ({ name, brand, category, description }) => ({
+      name,
+      brand,
+      category,
+      description,
+    })
+  );
+
+  const messages = [
+    {
+      role: "system",
+      content:
+        "You are a skincare expert. Generate a personalized skincare routine based on the provided products.",
+    },
+    {
+      role: "user",
+      content: `Here are the selected products: ${JSON.stringify(
+        productsForAPI
+      )}`,
+    },
+  ];
+
+  try {
+    const response = await fetch(WORKER_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "gpt-4o",
+        messages,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (data.choices && data.choices[0].message.content) {
+      const routine = data.choices[0].message.content;
+      chatWindow.innerHTML = `<h2>Let's Build Your Routine</h2><p>${routine}</p>`;
+    } else {
+      chatWindow.innerHTML = "Failed to generate a routine. Please try again.";
+    }
+  } catch (error) {
+    console.error("Error generating routine:", error);
+    chatWindow.innerHTML = "An error occurred. Please try again later.";
+  }
 });
 
 // Initialize the modal when the script loads
