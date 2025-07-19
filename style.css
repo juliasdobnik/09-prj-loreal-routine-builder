@@ -253,3 +253,23 @@ body {
 .generate-btn i {
   margin-right: 8px;
 }
+
+.product-card.selected {
+  border: 2px solid #007bff; /* Highlight selected product with a blue border */
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+}
+
+/* remove button */
+.remove-btn {
+  background: none;
+  border: none;
+  color: black;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 0.5rem;
+}
+
+.remove-btn:hover {
+  color: red; /* Optional: Add hover effect for better UX */
+}
