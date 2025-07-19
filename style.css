@@ -273,3 +273,78 @@ body {
 .remove-btn:hover {
   color: red; /* Optional: Add hover effect for better UX */
 }
+
+/* modal styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  margin: 40px;
+  background: white;
+  padding: 30px; /* Add more padding to create space between content and edges */
+  border-radius: 8px;
+  max-width: 600px; /* Increase the modal width */
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative; /* Ensure the close button is positioned relative to the modal content */
+  display: flex; /* Use flexbox for horizontal alignment */
+  flex-direction: row; /* Ensure columns are aligned horizontally */
+  gap: 20px; /* Add spacing between the image and text */
+  align-items: center; /* Vertically align content */
+}
+
+.modal-content img {
+  width: 40%; /* Set the image to take up 40% of the width */
+  height: auto;
+  object-fit: contain;
+}
+
+#modalDetails {
+  flex: 1; /* Allow the text to take up the remaining space */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center-align text vertically */
+  text-align: left; /* Align text to the left */
+}
+
+#modalDetails h2 {
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+}
+
+#modalDetails p {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: black;
+  font-size: 1.5rem; /* Increase the size of the close button */
+  cursor: pointer;
+  padding: 0;
+  position: absolute;
+  top: 20px; /* Adjust spacing from the top */
+  right: 20px; /* Adjust spacing from the right */
+  z-index: 1001; /* Ensure the close button is above other elements */
+}
+
+.close-btn:hover {
+  color: red; /* Optional: Add hover effect for better UX */
+}

@@ -78,6 +78,44 @@ function removeProductFromList(index) {
   updateSelectedProductsList();
 }
 
+/* Create a modal for displaying product details */
+function createProductModal() {
+  const modal = document.createElement("div");
+  modal.id = "productModal";
+  modal.className = "modal hidden";
+  modal.innerHTML = `
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <div id="modalDetails"></div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  // Close modal when clicking the close button
+  modal.querySelector(".close-btn").addEventListener("click", () => {
+    modal.classList.add("hidden");
+  });
+
+  // Close modal when clicking outside the modal content
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.classList.add("hidden");
+    }
+  });
+}
+
+/* Show product details in the modal */
+function showProductDetails(product) {
+  const modal = document.getElementById("productModal");
+  const modalDetails = document.getElementById("modalDetails");
+  modalDetails.innerHTML = `
+    <h2>${product.name}</h2>
+    <p>${product.description}</p>
+    <img src="${product.image}" alt="${product.name}">
+  `;
+  modal.classList.remove("hidden");
+}
+
 /* Create HTML for displaying product cards */
 function displayProducts(products) {
   productsContainer.innerHTML = products
@@ -97,9 +135,19 @@ function displayProducts(products) {
   // Add click event listeners to product cards
   const productCards = document.querySelectorAll(".product-card");
   productCards.forEach((card, index) => {
-    card.addEventListener("click", () =>
-      toggleProductSelection(products[index], card)
-    );
+    card.addEventListener("click", () => {
+      const product = products[index];
+      const isSelected = selectedProducts.some(
+        (selected) => selected.name === product.name
+      );
+
+      toggleProductSelection(product, card);
+
+      // Show modal only if the product is being selected
+      if (!isSelected) {
+        showProductDetails(product);
+      }
+    });
   });
 }
 
@@ -123,3 +171,6 @@ chatForm.addEventListener("submit", (e) => {
 
   chatWindow.innerHTML = "Connect to the OpenAI API for a response!";
 });
+
+// Initialize the modal when the script loads
+createProductModal();
