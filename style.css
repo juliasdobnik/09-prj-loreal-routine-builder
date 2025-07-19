@@ -193,6 +193,7 @@ body {
   height: 110px;
   object-fit: contain;
   flex-shrink: 0;
+  margin-right: 20px; /* Move the image further to the right */
 }
 
 .product-card .product-info {
@@ -211,6 +212,7 @@ body {
 .product-card p {
   font-size: 14px;
   color: #666;
+  margin-top: 15px; /* Add a bigger gap between the paragraph and the image */
 }
 
 /* selected products */
@@ -303,15 +305,20 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   position: relative; /* Ensure the close button is positioned relative to the modal content */
   display: flex; /* Use flexbox for horizontal alignment */
-  flex-direction: row; /* Ensure columns are aligned horizontally */
-  gap: 20px; /* Add spacing between the image and text */
-  align-items: center; /* Vertically align content */
+  flex-direction: column; /* Stack content vertically */
+  align-items: center; /* Center-align all content */
+  text-align: center; /* Center-align text */
+  gap: 20px; /* Add spacing between elements */
+  max-height: 90vh; /* Limit modal height to viewport height */
+  overflow-y: auto; /* Enable scrolling if content overflows */
 }
 
 .modal-content img {
-  width: 40%; /* Set the image to take up 40% of the width */
+  max-width: 70%; /* Make the image larger */
   height: auto;
   object-fit: contain;
+  display: block;
+  margin: 0 auto; /* Center the image in the modal window */
 }
 
 #modalDetails {
