@@ -137,18 +137,14 @@ function displayProducts(products) {
   // Add click event listeners to product cards
   const productCards = document.querySelectorAll(".product-card");
   productCards.forEach((card, index) => {
-    card.addEventListener("click", () => {
-      const product = products[index];
-      const isSelected = selectedProducts.some(
-        (selected) => selected.name === product.name
-      );
-
-      toggleProductSelection(product, card);
-
-      // Show modal only if the product is being selected
-      if (!isSelected) {
-        showProductDetails(product);
+    card.addEventListener("click", (event) => {
+      // Prevent modal opening if 'Details' button is clicked
+      if (event.target.classList.contains("details-btn")) {
+        return;
       }
+
+      const product = products[index];
+      toggleProductSelection(product, card);
     });
   });
 
