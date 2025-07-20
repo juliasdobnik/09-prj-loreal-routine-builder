@@ -87,5 +87,29 @@
 
     <!-- secrets.js can be removed when using Cloudflare Workers for API requests -->
     <script src="script.js"></script>
+
+    <!-- Google Translate Widget -->
+    <script type="text/javascript">
+      function googleTranslateElementInit() {
+        new google.translate.TranslateElement(
+          {
+            pageLanguage: "en",
+            includedLanguages:
+              "ar,en,es,fr,de,zh,hi,ja,ru,pt,it,ko,tr,vi,pl,uk,th,id,ms,fa,sv,da,nl", // 23 most common languages
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+          },
+          "google_translate_element"
+        );
+      }
+    </script>
+    <script
+      type="text/javascript"
+      src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+    ></script>
+
+    <div
+      id="google_translate_element"
+      style="text-align: right; margin: 10px 0"
+    ></div>
   </body>
 </html>

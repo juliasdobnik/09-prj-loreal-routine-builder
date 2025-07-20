@@ -377,5 +377,12 @@ generateRoutineBtn.addEventListener("click", async () => {
   }
 });
 
+/* Toggle between LTR and RTL layouts */
+const languageSelector = document.getElementById("language");
+languageSelector.addEventListener("change", (e) => {
+  const selectedDirection = e.target.value;
+  document.body.setAttribute("dir", selectedDirection);
+});
+
 // Ensure the modal is created when the script initializes
 createProductModal();
