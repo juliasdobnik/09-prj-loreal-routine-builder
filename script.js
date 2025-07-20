@@ -41,7 +41,32 @@ function toggleProductSelection(product, cardElement) {
   updateSelectedProductsList();
 }
 
-/* Update the selected products list in the UI */
+/* Load selected products from localStorage on page load */
+window.addEventListener("load", () => {
+  const savedProducts = localStorage.getItem("selectedProducts");
+  if (savedProducts) {
+    const parsedProducts = JSON.parse(savedProducts);
+    parsedProducts.forEach((product) => {
+      selectedProducts.push(product);
+
+      // Find the corresponding product card and add the 'selected' class
+      const productCards = document.querySelectorAll(".product-card");
+      productCards.forEach((card) => {
+        if (card.dataset.name === product.name) {
+          card.classList.add("selected");
+        }
+      });
+    });
+    updateSelectedProductsList();
+  }
+});
+
+/* Save selected products to localStorage */
+function saveSelectedProducts() {
+  localStorage.setItem("selectedProducts", JSON.stringify(selectedProducts));
+}
+
+/* Update the selected products list in the UI and save to localStorage */
 function updateSelectedProductsList() {
   const selectedProductsList = document.getElementById("selectedProductsList");
   selectedProductsList.innerHTML = selectedProducts
@@ -62,6 +87,9 @@ function updateSelectedProductsList() {
       removeProductFromList(productIndex);
     });
   });
+
+  // Save the updated list to localStorage
+  saveSelectedProducts();
 }
 
 /* Remove a product from the selected list */
