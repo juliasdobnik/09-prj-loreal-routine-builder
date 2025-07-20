@@ -9,6 +9,69 @@
 body {
   font-family: "Montserrat", Arial, Helvetica, sans-serif;
   color: #333;
+  background-color: #ffffff;
+  background-image: radial-gradient(
+      circle at 15% 25%,
+      transparent 119px,
+      #e3a535 120px,
+      transparent 121px
+    ),
+    radial-gradient(
+      circle at 75% 40%,
+      transparent 179px,
+      #e3a535 180px,
+      transparent 181px
+    ),
+    radial-gradient(
+      circle at 50% 90%,
+      transparent 249px,
+      #e3a535 250px,
+      transparent 251px
+    ),
+    radial-gradient(
+      circle at 90% 10%,
+      transparent 199px,
+      #e3a535 200px,
+      transparent 201px
+    ),
+    radial-gradient(
+      circle at 10% 60%,
+      transparent 119px,
+      #e3a535 120px,
+      transparent 121px
+    ),
+    /* Duplicate set with #ff003b color and more scattered positions */
+      radial-gradient(
+        circle at 5% 10%,
+        transparent 119px,
+        #ff003b 120px,
+        transparent 121px
+      ),
+    radial-gradient(
+      circle at 95% 80%,
+      transparent 179px,
+      #ff003b 180px,
+      transparent 181px
+    ),
+    radial-gradient(
+      circle at 30% 95%,
+      transparent 249px,
+      #ff003b 250px,
+      transparent 251px
+    ),
+    radial-gradient(
+      circle at 85% 5%,
+      transparent 199px,
+      #ff003b 200px,
+      transparent 201px
+    ),
+    radial-gradient(
+      circle at 20% 70%,
+      transparent 119px,
+      #ff003b 120px,
+      transparent 121px
+    );
+  background-size: 100% 100%;
   display: flex;
   justify-content: center;
 }
@@ -64,6 +127,7 @@ body {
   border: 2px solid #000;
   border-radius: 8px;
   padding: 26px;
+  background-color: white; /* Ensure chatbox section has a white background */
 }
 
 .chatbox h2 {
@@ -225,6 +289,7 @@ body {
   padding: 20px;
   border: 2px solid #000;
   border-radius: 8px;
+  background-color: white; /* Ensure selected products section has a white background */
 }
 
 .selected-products h2 {
