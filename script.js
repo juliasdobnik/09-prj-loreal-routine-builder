@@ -127,6 +127,7 @@ function displayProducts(products) {
           <div class="product-info">
             <h3>${product.name}</h3>
             <p>${product.brand}</p>
+            <button class="details-btn">Details</button>
           </div>
         </div>
       `
@@ -147,6 +148,24 @@ function displayProducts(products) {
       // Show modal only if the product is being selected
       if (!isSelected) {
         showProductDetails(product);
+      }
+    });
+  });
+
+  // Add click event listeners to 'Details' buttons
+  const detailsButtons = document.querySelectorAll(".details-btn");
+  detailsButtons.forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.stopPropagation(); // Prevent triggering the card's click event
+      const productCard = button.closest(".product-card");
+      const productName = productCard.dataset.name;
+      console.log("Details button clicked for product:", productName); // Debug log
+      const product = products.find((p) => p.name === productName);
+      if (product) {
+        console.log("Product found:", product); // Debug log
+        showProductDetails(product);
+      } else {
+        console.error("Product not found for name:", productName); // Debug log
       }
     });
   });
@@ -175,6 +194,11 @@ const conversationHistory = [
   },
 ];
 
+/* Function to scroll chatbox to the bottom */
+function scrollToBottom() {
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+}
+
 /* Chat form submission handler - process user questions */
 chatForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -182,10 +206,13 @@ chatForm.addEventListener("submit", async (e) => {
   const userInput = e.target.elements["userInput"].value.trim();
   if (!userInput) {
     chatWindow.innerHTML += "<p>Please enter a question or message.</p>";
+    scrollToBottom();
     return;
   }
 
-  chatWindow.innerHTML += `<p><strong>You:</strong> ${userInput}</p>`;
+  // Add user message bubble
+  chatWindow.innerHTML += `<div class="chat-user"><p><strong>You:</strong> ${userInput}</p></div>`;
+  scrollToBottom();
 
   // Add user input to conversation history
   conversationHistory.push({ role: "user", content: userInput });
@@ -210,17 +237,28 @@ chatForm.addEventListener("submit", async (e) => {
 
     if (data.choices && data.choices[0].message.content) {
       const reply = data.choices[0].message.content;
-      chatWindow.innerHTML += `<p><strong>Expert:</strong> ${reply}</p>`;
+
+      // Format the reply for better readability
+      const formattedReply = reply
+        .split("\n\n")
+        .map((paragraph) => `<p>${paragraph}</p>`)
+        .join("");
+
+      // Add chatbot message bubble
+      chatWindow.innerHTML += `<div class="chat-reply"><p><strong>Expert:</strong>${formattedReply}</p></div>`;
+      scrollToBottom();
 
       // Add chatbot reply to conversation history
       conversationHistory.push({ role: "assistant", content: reply });
     } else {
       chatWindow.innerHTML +=
         "<p>Failed to get a response. Please try again.</p>";
+      scrollToBottom();
     }
   } catch (error) {
     console.error("Error processing question:", error);
     chatWindow.innerHTML += "<p>An error occurred. Please try again later.</p>";
+    scrollToBottom();
   }
 
   e.target.reset();
@@ -232,9 +270,17 @@ const WORKER_URL = "https://loreal-chatbot.jsdobnik.workers.dev/";
 // Generate routine button click handler
 generateRoutineBtn.addEventListener("click", async () => {
   if (selectedProducts.length === 0) {
-    chatWindow.innerHTML = "Please select some products to generate a routine.";
+    chatWindow.innerHTML += `<div class="chat-reply"><p>Please select some products to generate a routine.</p></div>`;
+    scrollToBottom();
     return;
   }
+
+  // Show loading message
+  const loadingMessage = document.createElement("div");
+  loadingMessage.className = "chat-reply";
+  loadingMessage.innerHTML = `<p>Your routine is being generated...</p>`;
+  chatWindow.appendChild(loadingMessage);
+  scrollToBottom();
 
   // Prepare data for OpenAI API
   const productsForAPI = selectedProducts.map(
@@ -269,6 +315,7 @@ generateRoutineBtn.addEventListener("click", async () => {
       body: JSON.stringify({
         model: "gpt-4o",
         messages,
+        max_tokens: 500, // Adjust this value as needed
       }),
     });
 
@@ -278,17 +325,33 @@ generateRoutineBtn.addEventListener("click", async () => {
 
     const data = await response.json();
 
+    // Remove loading message
+    chatWindow.removeChild(loadingMessage);
+
     if (data.choices && data.choices[0].message.content) {
       const routine = data.choices[0].message.content;
-      chatWindow.innerHTML = `<h2>Let's Build Your Routine</h2><p>${routine}</p>`;
+
+      // Format the routine for better readability
+      const formattedRoutine = routine
+        .split("\n\n")
+        .map((step) => `<p>${step}</p>`)
+        .join("");
+
+      // Display the routine as plain content
+      chatWindow.innerHTML += `<h2>Your Personalized Routine:</h2>${formattedRoutine}`;
+      scrollToBottom();
     } else {
-      chatWindow.innerHTML = "Failed to generate a routine. Please try again.";
+      chatWindow.innerHTML +=
+        "<p>Failed to generate a routine. Please try again.</p>";
+      scrollToBottom();
     }
   } catch (error) {
     console.error("Error generating routine:", error);
-    chatWindow.innerHTML = "An error occurred. Please try again later.";
+    chatWindow.innerHTML +=
+      "<p>An error occurred while generating the routine. Please try again later.</p>";
+    scrollToBottom();
   }
 });
 
-// Initialize the modal when the script loads
+// Ensure the modal is created when the script initializes
 createProductModal();

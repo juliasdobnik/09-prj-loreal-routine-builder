@@ -215,6 +215,10 @@ body {
   margin-top: 15px; /* Add a bigger gap between the paragraph and the image */
 }
 
+.product-info p {
+  margin-bottom: 10px; /* Add spacing below the brand name */
+}
+
 /* selected products */
 .selected-products {
   margin: 40px 0;
@@ -354,4 +358,64 @@ body {
 
 .close-btn:hover {
   color: red; /* Optional: Add hover effect for better UX */
+}
+
+/* chat message bubbles */
+.chat-reply {
+  display: flex;
+  justify-content: flex-start;
+  margin: 10px 0;
+}
+
+.chat-reply p {
+  background-color: #f1f1f1;
+  border-radius: 10px;
+  padding: 10px;
+  max-width: 70%;
+  word-wrap: break-word;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.chat-reply strong {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.chat-user {
+  display: flex;
+  justify-content: flex-end;
+  margin: 10px 0;
+}
+
+.chat-user p {
+  background-color: #d1e7dd;
+  border-radius: 10px;
+  padding: 10px;
+  max-width: 70%;
+  word-wrap: break-word;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.product-card .details-btn {
+  display: none;
+}
+
+.product-card:hover .details-btn {
+  display: inline-block;
+}
+
+.details-btn {
+  background-color: #f4a261; /* Match the website's color scheme */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.details-btn:hover {
+  background-color: #e76f51; /* Slightly darker shade for hover effect */
 }
