@@ -311,7 +311,7 @@ generateRoutineBtn.addEventListener("click", async () => {
       body: JSON.stringify({
         model: "gpt-4o",
         messages,
-        max_tokens: 500, // Adjust this value as needed
+        max_tokens: 1000, // Adjust this value as needed
       }),
     });
 
