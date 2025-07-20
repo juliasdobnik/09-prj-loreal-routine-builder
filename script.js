@@ -166,15 +166,65 @@ categoryFilter.addEventListener("change", async (e) => {
   displayProducts(filteredProducts);
 });
 
-/* Chat form submission handler - placeholder for OpenAI integration */
-chatForm.addEventListener("submit", (e) => {
+/* Chat form submission handler - process user questions */
+chatForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  chatWindow.innerHTML = "Connect to the OpenAI API for a response!";
+  const userInput = e.target.elements["userInput"].value.trim();
+  if (!userInput) {
+    chatWindow.innerHTML += "<p>Please enter a question or message.</p>";
+    return;
+  }
+
+  chatWindow.innerHTML += `<p><strong>You:</strong> ${userInput}</p>`;
+
+  const messages = [
+    {
+      role: "system",
+      content:
+        "You are a skincare expert. Answer questions related to the generated routine or topics like skincare, haircare, makeup, and fragrance. Be concise and helpful.",
+    },
+    {
+      role: "user",
+      content: userInput,
+    },
+  ];
+
+  try {
+    const response = await fetch(WORKER_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "gpt-4o",
+        messages,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (data.choices && data.choices[0].message.content) {
+      const reply = data.choices[0].message.content;
+      chatWindow.innerHTML += `<p><strong>Expert:</strong> ${reply}</p>`;
+    } else {
+      chatWindow.innerHTML +=
+        "<p>Failed to get a response. Please try again.</p>";
+    }
+  } catch (error) {
+    console.error("Error processing question:", error);
+    chatWindow.innerHTML += "<p>An error occurred. Please try again later.</p>";
+  }
+
+  e.target.reset();
 });
 
 /* Cloudflare Worker URL */
-const WORKER_URL = "https://loreal-chatbot.jsdobnik.workers.dev/"; 
+const WORKER_URL = "https://loreal-chatbot.jsdobnik.workers.dev/";
 
 // Generate routine button click handler
 generateRoutineBtn.addEventListener("click", async () => {
