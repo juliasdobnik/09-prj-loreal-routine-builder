@@ -166,6 +166,15 @@ categoryFilter.addEventListener("change", async (e) => {
   displayProducts(filteredProducts);
 });
 
+/* Maintain conversation history */
+const conversationHistory = [
+  {
+    role: "system",
+    content:
+      "You are a skincare expert. Answer questions related to the generated routine or topics like skincare, haircare, makeup, and fragrance. Be concise and helpful.",
+  },
+];
+
 /* Chat form submission handler - process user questions */
 chatForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -178,17 +187,8 @@ chatForm.addEventListener("submit", async (e) => {
 
   chatWindow.innerHTML += `<p><strong>You:</strong> ${userInput}</p>`;
 
-  const messages = [
-    {
-      role: "system",
-      content:
-        "You are a skincare expert. Answer questions related to the generated routine or topics like skincare, haircare, makeup, and fragrance. Be concise and helpful.",
-    },
-    {
-      role: "user",
-      content: userInput,
-    },
-  ];
+  // Add user input to conversation history
+  conversationHistory.push({ role: "user", content: userInput });
 
   try {
     const response = await fetch(WORKER_URL, {
@@ -198,7 +198,7 @@ chatForm.addEventListener("submit", async (e) => {
       },
       body: JSON.stringify({
         model: "gpt-4o",
-        messages,
+        messages: conversationHistory,
       }),
     });
 
@@ -211,6 +211,9 @@ chatForm.addEventListener("submit", async (e) => {
     if (data.choices && data.choices[0].message.content) {
       const reply = data.choices[0].message.content;
       chatWindow.innerHTML += `<p><strong>Expert:</strong> ${reply}</p>`;
+
+      // Add chatbot reply to conversation history
+      conversationHistory.push({ role: "assistant", content: reply });
     } else {
       chatWindow.innerHTML +=
         "<p>Failed to get a response. Please try again.</p>";
